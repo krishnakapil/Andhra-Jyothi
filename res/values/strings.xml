@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">ABN Andhra Jyothi</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="general_error">Something went wrong! Please try again.</string>
+    <string name="network_error">Internet Connection not available!\n\nPlease make sure you are connected to Network.</string>
+    <string name="title_action">We Report. You Decide.</string>
+
+</resources>

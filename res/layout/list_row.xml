@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    >
+
+	<!--  ListRow Left sied Thumbnail image -->
+	<LinearLayout android:id="@+id/thumbnail" 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="3dip"		
+        android:layout_alignParentLeft="true"        
+	    android:layout_marginLeft="3dip">
+        
+		<ImageView     
+			android:id="@+id/list_image"   
+	        android:layout_width="50dp"
+	        android:layout_height="50dp"
+	        android:scaleType="fitXY"         
+            android:layout_weight="1.0"
+            android:gravity="center"
+	        android:adjustViewBounds="true"
+	        android:layout_gravity="bottom|center_horizontal"
+	        android:background="@drawable/rounded"
+	         />
+        
+	</LinearLayout>
+    
+	<!-- Title Of Song-->
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/thumbnail"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="3dp"
+        android:textColor="#040404"       
+        android:paddingTop="15dp"
+        android:typeface="normal" 
+        android:textStyle="bold"
+        android:textSize="12dip"
+        />
+    
+    
+     <TextView
+        android:id="@+id/count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/thumbnail"
+        android:layout_alignLeft="@+id/title"
+        android:layout_marginLeft="110dp"     
+        android:textColor="#040404"
+        android:textSize="12dip"       
+        android:typeface="sans" 
+        android:layout_marginBottom="15dp"/>
+
+
+</RelativeLayout>
