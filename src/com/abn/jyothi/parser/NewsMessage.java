@@ -5,6 +5,10 @@ package com.abn.jyothi.parser;
 
 
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -86,39 +90,25 @@ public class NewsMessage implements Comparable<NewsMessage>,Parcelable{
 		return imageUrl;
 	}
 
-	public void setImageUrl(String description) {
-		this.description=description.trim();
-		this.imageUrl =  description.trim();		
-		if (description.contains("<img ")){  
-			String imgurl=null;
-          	String img  = description.substring(description.indexOf("<img ")); 
-           img = img.substring(img.indexOf("src=") + 4);
-         
-          String subUrl=img.substring(0,4);          
-          String startImageUrl1=img.substring(1);
-         
-           if(subUrl.startsWith("http"))
-           {
-        	  
-        	   int newindexOf = img.indexOf(".jpg")+4;  
-        	  
-        	   img = img.substring(0, newindexOf);
-        	   imgurl=img;
-        	  
-           }
-           else if(subUrl.startsWith("'"))
-           {
-        	   int newindexOf = startImageUrl1.indexOf("'")+1; 
-        	   img = img.substring(1, newindexOf);
-        	  
-        	   imgurl=img;
-           }
-           
+	public void setImageUrl(String description) 
+	{
+		this.imageUrl = "";
+		
+		ArrayList<String> list = retrieveLinks(description);
+		
+		if(list != null)
+		{
+			for (String str : list) 
+			{
+				if((str.toLowerCase().contains("jpg") || str.toLowerCase().contains("png") || str.toLowerCase().contains("gif")) && !this.image.trim().equalsIgnoreCase(str.trim()))
+					{
+						this.imageUrl = str;
+						break;
+					}
+			}
 		}
-		else
-        {
-     	   this.imageUrl=null;
-        }
+		
+		Log.d("ABN","IMAGE Url : "+imageUrl);
 	}
 	
 	public String getImage() {
@@ -143,7 +133,59 @@ public class NewsMessage implements Comparable<NewsMessage>,Parcelable{
 		Log.v("image-----else","tag is::"+image);
 	}
 	
+	public String getVideoUrl() 
+	{
+		return videoUrl;
+	}
 	
+	public void setVideoUrl(String newsDesc) 
+	{
+		this.videoUrl = "";
+		
+		ArrayList<String> list = retrieveLinks(newsDesc);
+		
+		if(list != null)
+		{
+			for (String str : list) 
+			{
+				if(str.contains("youtube.com"))
+					{
+						this.videoUrl = str;
+						break;
+					}
+			}
+		}
+		
+		Log.d("ABN","VIDEO Url : "+videoUrl);
+	}
+	
+	private ArrayList<String> retrieveLinks(String text) 
+	{
+		ArrayList<String> links = new ArrayList<String>();
+
+		String regex = "\\(?\\b(http://|www[.]|https://|rtsp://)[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(text);
+		while(m.find()) {
+			String urlStr = m.group();
+			char[] stringArray1 = urlStr.toCharArray();
+
+			if (urlStr.startsWith("(") && urlStr.endsWith(")"))
+			{
+
+				char[] stringArray = urlStr.toCharArray(); 
+
+				char[] newArray = new char[stringArray.length-2];
+				System.arraycopy(stringArray, 1, newArray, 0, stringArray.length-2);
+				urlStr = new String(newArray);
+				System.out.println("Finally Url ="+newArray.toString());
+
+			}
+			
+			links.add(urlStr);
+		}
+		return links;
+	}
 	
 	/*public String getVideoUrl() {
 		return videoUrl;

@@ -51,7 +51,7 @@ public class AndroidSaxFeedParser extends BaseFeedParser {
 		item.getChild(IMAGEURL).setEndTextElementListener(new EndTextElementListener(){
 			public void end(String body) {	
 				
-				currentMessage.setImageUrl(body);
+				//currentMessage.setImageUrl(body);
 			}
 		});
 		item.getChild(IMAGE).setEndTextElementListener(new EndTextElementListener(){
@@ -64,7 +64,8 @@ public class AndroidSaxFeedParser extends BaseFeedParser {
 			public void end(String body) {
 			
 				currentMessage.setNewsDesc(body);
-				
+				currentMessage.setVideoUrl(body);
+				currentMessage.setImageUrl(body);
 			}
 		});
 		/*item.getChild(PUB_DATE).setEndTextElementListener(new EndTextElementListener(){

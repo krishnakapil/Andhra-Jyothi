@@ -10,4 +10,5 @@
 		android:scaleType="fitXY"
 		android:src="@drawable/splashscreen"/>
 
+
 </RelativeLayout>

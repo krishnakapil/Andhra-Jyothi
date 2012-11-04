@@ -108,10 +108,18 @@ public class NewsTabsFragment extends SherlockFragment
 		@Override
 		protected void perform() 
 		{
-			AndroidSaxFeedParser parser = new AndroidSaxFeedParser(feedUrl);
-			rssData = parser.parse();
+			try
+			{
+				AndroidSaxFeedParser parser = new AndroidSaxFeedParser(feedUrl);
+				rssData = parser.parse();
+				
+				Utility.getInstance().rssDataMesseges.put(category, rssData);
+			}
+			catch(Exception e)
+			{
+				getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
+			}
 			
-			Utility.getInstance().rssDataMesseges.put(category, rssData);
 		}
 
 		@Override

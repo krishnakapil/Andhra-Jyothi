@@ -5,22 +5,20 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 
-import com.abn.jyothi.parser.NewsMessage;
-
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.widget.Toast;
+
+import com.abn.jyothi.parser.NewsMessage;
 
 public class Utility 
 {
 	
 	public static String TOP_NEWS_URL = "http://www.abnandhrajyothy.com/category/top-stories/feed";
 	public static String FEATURED_NEWS_URL = "http://www.abnandhrajyothy.com/category/featured-stories/feed";
-	public static String BREAKING_NEWS_URL ="http://www.abnandhrajyothy.com/category/breaking-news/feed";
+	public static String BREAKING_NEWS_URL = "http://www.abnandhrajyothy.com/category/breaking-news/feed";
 	public static String POLITICAL_NEWS_URL = "http://www.abnandhrajyothy.com/category/political-news/feed";
 	public static String GENERAL_NEWS_URL = "http://www.abnandhrajyothy.com/category/general-news/feed";
-	public static String EDUCATION_NEWS_URL   ="http://www.abnandhrajyothy.com/category/education/feed";
+	public static String EDUCATION_NEWS_URL = "http://www.abnandhrajyothy.com/category/education/feed";
 	public static String CINEMA_NEWS_URL = "http://www.abnandhrajyothy.com/category/cinema-news/feed";
 	
 	private static Utility instance;
@@ -42,6 +40,8 @@ public class Utility
 		}
 		return instance;
 	}
+	
+	
 	
 	
 	

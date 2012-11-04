@@ -42,6 +42,8 @@ public class HomeScreenActivity extends SherlockFragmentActivity
 		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		
+		setSupportProgressBarIndeterminateVisibility(false);
+		
 		setContentView(R.layout.activity_home_screen);
 		
 		getSupportActionBar().setSubtitle(getResources().getString(R.string.title_action));

@@ -1,14 +1,15 @@
 package com.abn.jyothi;
 
-import com.abn.jyothi.utils.NetworkAsyncTask;
-import com.abn.jyothi.utils.Utility;
-
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+
+import com.abn.jyothi.parser.AndroidSaxFeedParser;
+import com.abn.jyothi.utils.NetworkAsyncTask;
+import com.abn.jyothi.utils.Utility;
 
 public class SplashActivity extends Activity 
 {
@@ -47,11 +48,30 @@ public class SplashActivity extends Activity
 		{
 			try 
 			{
-				Thread.sleep(3000);
+				AndroidSaxFeedParser parser = new AndroidSaxFeedParser(Utility.TOP_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Top News", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.FEATURED_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Featured News", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.BREAKING_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Breaking News", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.POLITICAL_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Political News", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.GENERAL_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("General News", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.EDUCATION_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Education", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.CINEMA_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Cinema News", parser.parse());
 			} 
-			catch (InterruptedException e) 
+			catch (Exception e) 
 			{
-				e.printStackTrace();
+				Utility.getInstance().showToastLong(SplashActivity.this, SplashActivity.this.getResources().getString(com.abn.jyothi.R.string.general_error));
 			}
 		}
 
