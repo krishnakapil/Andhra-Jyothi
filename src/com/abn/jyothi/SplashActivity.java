@@ -51,7 +51,7 @@ public class SplashActivity extends Activity
 				AndroidSaxFeedParser parser = new AndroidSaxFeedParser(Utility.TOP_NEWS_URL);
 				Utility.getInstance().rssDataMesseges.put("Top News", parser.parse());
 				
-				parser = new AndroidSaxFeedParser(Utility.FEATURED_NEWS_URL);
+				/*parser = new AndroidSaxFeedParser(Utility.FEATURED_NEWS_URL);
 				Utility.getInstance().rssDataMesseges.put("Featured News", parser.parse());
 				
 				parser = new AndroidSaxFeedParser(Utility.BREAKING_NEWS_URL);
@@ -67,7 +67,7 @@ public class SplashActivity extends Activity
 				Utility.getInstance().rssDataMesseges.put("Education", parser.parse());
 				
 				parser = new AndroidSaxFeedParser(Utility.CINEMA_NEWS_URL);
-				Utility.getInstance().rssDataMesseges.put("Cinema News", parser.parse());
+				Utility.getInstance().rssDataMesseges.put("Cinema News", parser.parse());*/
 			} 
 			catch (Exception e) 
 			{

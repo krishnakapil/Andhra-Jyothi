@@ -19,6 +19,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -50,6 +51,8 @@ public class YouTubePlayer extends RelativeLayout
 	private String videoId = "";
 	
 	private Context mContext;
+	
+	private String utubeUrl = "";
 	
 	public ImageLoader imageLoader; 
 	
@@ -91,18 +94,6 @@ public class YouTubePlayer extends RelativeLayout
 		mimgView = (ImageView)lay.findViewById(R.id.imageView1);
 		
 		mPlayBtn = (Button)lay.findViewById(R.id.playBtn);
-		mPlayBtn.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) 
-			{
-				mPlayBtn.setVisibility(View.GONE);
-				playVideo();
-			}
-		});
-		
-		
-		
 		
 		mLoadingTxt = (TextView)lay.findViewById(R.id.loadingTxt);
 		
@@ -128,6 +119,22 @@ public class YouTubePlayer extends RelativeLayout
 	{
 		try 
 		{
+			utubeUrl = url;
+			
+			mPlayBtn.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) 
+				{
+					/*mPlayBtn.setVisibility(View.GONE);
+					playVideo();*/
+					
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse(utubeUrl));
+					mContext.startActivity(intent);
+				}
+			});
+			
 			videoId = extractYoutubeId(url);
 			
 			imgUrl = "http://i.ytimg.com/vi/" + videoId + "/hqdefault.jpg";

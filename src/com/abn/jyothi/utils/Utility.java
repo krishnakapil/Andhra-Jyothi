@@ -20,6 +20,8 @@ public class Utility
 	public static String GENERAL_NEWS_URL = "http://www.abnandhrajyothy.com/category/general-news/feed";
 	public static String EDUCATION_NEWS_URL = "http://www.abnandhrajyothy.com/category/education/feed";
 	public static String CINEMA_NEWS_URL = "http://www.abnandhrajyothy.com/category/cinema-news/feed";
+	public static String LIVE_TV_URL = "http://www.yupptv.com/abnandhrajyothi_live.html";
+	public static String YOUTUBE_CHANNEL_URL = "http://www.youtube.com/abntelugutv";
 	
 	private static Utility instance;
 	

@@ -1,24 +1,33 @@
 package com.abn.jyothi;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
-import com.abn.jyothi.parser.NewsMessage;
+import com.abn.jyothi.parser.AndroidSaxFeedParser;
 import com.abn.jyothi.tabs.NewsTabsFragment;
+import com.abn.jyothi.utils.NetworkAsyncTask;
 import com.abn.jyothi.utils.Utility;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -46,7 +55,10 @@ public class HomeScreenActivity extends SherlockFragmentActivity
 		
 		setContentView(R.layout.activity_home_screen);
 		
-		getSupportActionBar().setSubtitle(getResources().getString(R.string.title_action));
+		getSupportActionBar().setDisplayShowHomeEnabled(false);
+		getSupportActionBar().setDisplayUseLogoEnabled(false);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		
 		
 		setControls();
 		
@@ -104,8 +116,50 @@ public class HomeScreenActivity extends SherlockFragmentActivity
         mTabsAdapter.addTab(mTabHost.newTabSpec("Cinema News").setIndicator("  Cinema News  "),
         		NewsTabsFragment.class, Utility.CINEMA_NEWS_URL);
         
+        //new LoadAdditionalData(HomeScreenActivity.this, "", "", false).execute();
+        
 	}
 
+	
+	private class LoadAdditionalData extends NetworkAsyncTask
+    {
+
+		public LoadAdditionalData(Context context, String title,
+				String message, boolean showDialog) 
+		{
+			super(context, title, message, showDialog);
+		}
+
+		@Override
+		protected void perform() 
+		{
+			try 
+			{
+				AndroidSaxFeedParser parser = new AndroidSaxFeedParser(Utility.POLITICAL_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Political News", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.GENERAL_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("General News", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.EDUCATION_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Education", parser.parse());
+				
+				parser = new AndroidSaxFeedParser(Utility.CINEMA_NEWS_URL);
+				Utility.getInstance().rssDataMesseges.put("Cinema News", parser.parse());
+			} 
+			catch (Exception e) 
+			{
+				
+			}
+		}
+
+		@Override
+		protected void postSuccess() 
+		{
+			Log.d("ABN", "DONE LOADING BACKGROUND DATA");
+		}
+    	
+    }
 
 
 	public static class TabsAdapter extends FragmentPagerAdapter
@@ -235,17 +289,27 @@ public class HomeScreenActivity extends SherlockFragmentActivity
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) 
 	{		
+		menu.add("EPaper")
+        .setIcon(R.drawable.aj_icon)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		
 		menu.add("Refresh")
         .setIcon(R.drawable.ic_refresh)
         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		
+		
 
-        SubMenu subMenu1 = menu.addSubMenu("More");
-        subMenu1.add("More Links");
-        subMenu1.add("Quit");
-
+        SubMenu subMenu1 = menu.addSubMenu("More Links");
+        SubMenu subMenu2 = menu.addSubMenu("Quit");
+        /*subMenu1.add("More Links");
+        subMenu1.add("Quit");*/
+        
         MenuItem subMenu1Item = subMenu1.getItem();
         subMenu1Item.setIcon(android.R.drawable.ic_menu_more);
-        subMenu1Item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        
+        MenuItem subMenu2Item = subMenu2.getItem();
+        subMenu2Item.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+        //subMenu1Item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -261,9 +325,24 @@ public class HomeScreenActivity extends SherlockFragmentActivity
 			showMoreLinks();
 		else if(item.getTitle().toString().equalsIgnoreCase("Quit"))
 			shutdownActivity();
+		else if(item.getTitle().toString().equalsIgnoreCase("EPaper"))
+			launchPaper();
 		
         return false;
     }
+	
+	
+	private void launchPaper()
+	{
+		SimpleDateFormat timeStampFormat = new SimpleDateFormat("yyyy/MM/dd");
+		 Date myDate = new Date();
+		 String filename = timeStampFormat.format(myDate);
+		Log.v("today","---"+filename);
+		String url = "http://epaper.andhrajyothy.com/PUBLICATIONS/AJ/AJYOTHI/"+filename+"/index.shtml";
+		Intent intent = new Intent(HomeScreenActivity.this, EPaperActivity.class);
+		intent.putExtra("epaper",url);
+		startActivity(intent);
+	}
 	
 	
 	private void refreshData()
@@ -281,7 +360,32 @@ public class HomeScreenActivity extends SherlockFragmentActivity
 	
 	private void showMoreLinks()
 	{
+		final Dialog dialog = new Dialog(HomeScreenActivity.this,R.style.CustomDialogTheme);
+		dialog.setContentView(R.layout.morelinks_dialog);
+		dialog.show();
 		
+		ImageButton video_button = (ImageButton) dialog.findViewById(R.id.youtubeBtn);
+		ImageButton liveTv_button = (ImageButton) dialog.findViewById(R.id.liveTvBtn);
+		
+		video_button.setOnClickListener(new OnClickListener() 
+		{
+			public void onClick(View arg0) 
+			{
+				dialog.dismiss();
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse(Utility.YOUTUBE_CHANNEL_URL));
+				startActivity(intent);
+			}
+		});
+		
+		liveTv_button.setOnClickListener(new OnClickListener() 
+		{
+			public void onClick(View arg0) 
+			{
+				dialog.dismiss();
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Utility.LIVE_TV_URL)));
+			}
+		});
 	}
 	
 
